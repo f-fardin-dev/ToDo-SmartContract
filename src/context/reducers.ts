@@ -13,13 +13,6 @@ export const tasksReducer = (tasks: Task[], action: Action) => {
           waitingToBeDeleted: false,
         },
       ];
-    case ActionsName.DELETE:
-      return tasks.map((task) => {
-        if (task.id === action.id) {
-          return { ...task, waitingToBeDeleted: true };
-        }
-        return task;
-      });
     case ActionsName.INSERT_ALL:
       return [...action.tasks];
     default: {
