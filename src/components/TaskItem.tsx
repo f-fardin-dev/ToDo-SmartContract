@@ -21,7 +21,7 @@ export const TaskItem = ({ id, title, waitingToBeAdded }: TaskItemProps) => {
   };
 
   return (
-    <div className="bg-violet-500 p-4 rounded-md flex justify-between relative overflow-hidden">
+    <div className="bg-violet-500 p-4 rounded-md flex justify-between relative overflow-hidden min-h-14">
       {title?.at(0)?.toUpperCase() + title?.slice(1)}
       <span onClick={handleDeleteTask}>
         <DeleteIcon />
