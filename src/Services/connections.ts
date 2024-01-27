@@ -55,6 +55,20 @@ export const addTask = async (title: string): Promise<boolean> => {
   }
 };
 
+export const deleteTask = async (id: number): Promise<boolean> => {
+  try {
+    const taskContract = await getContract();
+    if (!taskContract) {
+      return false;
+    }
+    await taskContract.deleteTask(id);
+    return true;
+  } catch (error) {
+    console.error((error as Record<string, string>).message);
+    return false;
+  }
+};
+
 export const getAllTask = async (): Promise<Task[]> => {
   try {
     const taskContract = await getContract();
