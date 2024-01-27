@@ -1,3 +1,6 @@
+import { ethers } from "ethers";
+import contract from "../../smart-contract/build/contracts/TaskContract.json";
+
 export const connectWallet = async (): Promise<undefined | string> => {
   try {
     if (typeof window === undefined || !window?.ethereum) {
@@ -19,5 +22,34 @@ export const connectWallet = async (): Promise<undefined | string> => {
   } catch (error) {
     console.error((error as Record<string, string>).message);
     return;
+  }
+};
+
+export const getContract = async () => {
+  if (typeof window === undefined || !window?.ethereum) {
+    console.error("Metamask not detected!");
+    return false;
+  }
+
+  const provider = new ethers.BrowserProvider(window.ethereum);
+  const signer = await provider.getSigner();
+  return new ethers.Contract(
+    process.env.NEXT_PUBLIC_CONTRACT_ADDRESS ?? "",
+    contract.abi,
+    signer
+  );
+};
+
+export const addTask = async (title: string): Promise<boolean> => {
+  try {
+    const taskContract = await getContract();
+    if (!taskContract) {
+      return false;
+    }
+    await taskContract.addTask(title);
+    return true;
+  } catch (error) {
+    console.error((error as Record<string, string>).message);
+    return false;
   }
 };
