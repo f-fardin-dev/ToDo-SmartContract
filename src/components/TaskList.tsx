@@ -46,7 +46,12 @@ export const TaskList = () => {
     "
     >
       {tasks.map((task) => (
-        <TaskItem key={task.id} id={task.id} title={task.title} />
+        <TaskItem
+          key={task.id}
+          id={task.id}
+          title={task.title}
+          waitingToBeAdded={task?.waitingToBeAdded}
+        />
       ))}
     </div>
   );

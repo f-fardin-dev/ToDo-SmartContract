@@ -3,10 +3,13 @@
 import { useRef, useState } from "react";
 import { Loader } from "./Icons";
 import { addTask } from "@app/Services/connections";
+import { useTasksDispatch } from "@app/context/TaskContext";
+import { ActionsName } from "@app/types/actions";
 
 export const AddTask = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
+  const dispatch = useTasksDispatch();
 
   const handleAddTask = async () => {
     if (!inputRef || !inputRef.current?.value) {
@@ -14,7 +17,10 @@ export const AddTask = () => {
     }
     try {
       setLoading(true);
-      await addTask(inputRef.current?.value);
+      const title = inputRef.current?.value;
+      await addTask(title);
+      // Math.random is not a good option for ID :)
+      dispatch({ type: ActionsName.ADD, title, id: Math.random() });
       inputRef.current.value = "";
     } finally {
       setLoading(false);
