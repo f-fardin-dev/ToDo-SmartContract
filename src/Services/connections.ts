@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import contract from "../../smart-contract/build/contracts/TaskContract.json";
+import { Task } from "@app/types/task";
 
 export const connectWallet = async (): Promise<undefined | string> => {
   try {
@@ -51,5 +52,22 @@ export const addTask = async (title: string): Promise<boolean> => {
   } catch (error) {
     console.error((error as Record<string, string>).message);
     return false;
+  }
+};
+
+export const getAllTask = async (): Promise<Task[]> => {
+  try {
+    const taskContract = await getContract();
+
+    if (!taskContract) {
+      return [];
+    }
+
+    const tasks: Task[] = await taskContract.getMyTasks();
+
+    return tasks;
+  } catch (error) {
+    console.error((error as Record<string, string>).message);
+    return [];
   }
 };
