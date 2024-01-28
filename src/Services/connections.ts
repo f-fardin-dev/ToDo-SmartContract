@@ -1,22 +1,25 @@
 import { ethers } from "ethers";
 import contract from "../../smart-contract/build/contracts/TaskContract.json";
 import { Task } from "@app/types/task";
+import { enqueueSnackbar } from "notistack";
 
 export const connectWallet = async (): Promise<undefined | string> => {
   try {
     if (typeof window === undefined || !window?.ethereum) {
-      console.error("Metamask not detected!");
+      enqueueSnackbar("Metamask not detected!", { variant: "error" });
       return;
     }
     const { ethereum } = window;
     const chainId = await ethereum.request({ method: "eth_chainId" });
     if (chainId !== "0xaa36a7") {
-      console.error("Your are not connecting with Sepolia network!");
+      enqueueSnackbar("Your are not connecting with Sepolia network!", {
+        variant: "error",
+      });
       return;
     }
     const account = await ethereum.request({ method: "eth_requestAccounts" });
     if (!account.length) {
-      console.error("Not founding your account!");
+      enqueueSnackbar("Not founding your account!", { variant: "error" });
       return;
     }
     return account[0];
@@ -28,7 +31,7 @@ export const connectWallet = async (): Promise<undefined | string> => {
 
 export const getContract = async () => {
   if (typeof window === undefined || !window?.ethereum) {
-    console.error("Metamask not detected!");
+    enqueueSnackbar("Metamask not detected!", { variant: "error" });
     return false;
   }
 
