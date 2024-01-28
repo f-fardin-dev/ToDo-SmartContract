@@ -33,7 +33,7 @@ export const WalletProvider = ({ children }: RC) => {
       const account = await connectWallet();
       setData((data) => ({
         ...data,
-        isMetamaskAvailable: true,
+        isMetamaskAvailable,
         isConnected: account ? window.ethereum.isConnected() : false,
         account: account ? (account as string) : undefined,
       }));
@@ -59,9 +59,10 @@ export const WalletProvider = ({ children }: RC) => {
 
     window.ethereum.on("accountsChanged", onAccountsChanged);
 
-    if (window.ethereum._state.accounts.length) {
+    if (window.ethereum._state.accounts?.length) {
       checkConnection();
     } else {
+      setData((data) => ({ ...data, isMetamaskAvailable }));
       setLoading(() => false);
     }
 
